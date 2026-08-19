@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pour Christina ❤️</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         CONTENEUR PRINCIPAL
+    ========================== -->
+
+    <main id="app">
+
+        <!-- =========================
+             SCÈNE 1 — INTRODUCTION
+        ========================== -->
+        <section class="scene scene-1 active" id="scene1">
+
+            <div class="stars"></div>
+
+            <div class="intro-orb"></div>
+
+            <div class="intro-ring ring-1"></div>
+            <div class="intro-ring ring-2"></div>
+
+            <div class="scene-content intro-content">
+
+                <p class="small-text intro-subtitle">
+                    Une petite histoire...
+                </p>
+
+                <div class="christina-wrapper">
+                    <span class="christina-glow"></span>
+                    <h1 class="christina-title">Christina</h1>
+                </div>
+
+                <p class="intro-text">
+                    Cette animation est spécialement pour toi
+                    <span class="intro-heart">❤️</span>
+                </p>
+
+                <button class="next-btn intro-button" data-next="2">
+                    Commencer
+                    <span>❤️</span>
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SCÈNE 2 — LE DÉBUT
+        ========================== -->
+        <section class="scene scene-2" id="scene2">
+
+            <div class="floating-hearts"></div>
+            <div class="scene2-glow"></div>
+            <div class="scene2-heart">❤️</div>
+
+            <div class="scene-content scene2-content">
+
+                <p class="small-text scene2-subtitle">Et puis un jour...</p>
+
+                <h2 class="scene2-title">Une personne arrive</h2>
+
+                <p class="message scene2-message">
+                    Sans forcément le savoir,
+                    elle commence à occuper une place particulière
+                    dans notre histoire.
+                </p>
+
+                <div class="scene2-divider">
+                    <span></span>
+                    <i>♥</i>
+                    <span></span>
+                </div>
+
+                <button class="next-btn scene2-button" data-next="3">
+                    Continuer
+                    <span>💕</span>
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SCÈNE 3 — SOUVENIRS
+        ========================== -->
+        <section class="scene scene-3" id="scene3">
+
+            <div class="constellation">
+                <div class="constellation-stars"></div>
+
+                <svg class="constellation-lines" viewBox="0 0 1000 700" preserveAspectRatio="none">
+                    <path class="constellation-path path-1" d="M150 300 L250 180 L370 260 L500 130 L630 260 L750 180 L850 300" />
+                    <path class="constellation-path path-2" d="M150 300 L250 430 L370 360 L500 560 L630 360 L750 430 L850 300" />
+                    <path class="constellation-path path-3" d="M250 180 L370 360 L500 130 L630 360 L750 180" />
+                </svg>
+            </div>
+
+            <!-- Conteneur des particules (manquait dans le HTML d'origine) -->
+            <div class="particles"></div>
+
+            <div class="scene-content scene3-content">
+
+                <p class="small-text scene3-subtitle">Et avec le temps...</p>
+
+                <h2 class="scene3-title">Certains moments deviennent précieux</h2>
+
+                <p class="message scene3-message">
+                    Pas parce qu'ils sont extraordinaires,
+                    mais simplement parce qu'ils sont vécus
+                    avec une personne particulière.
+                </p>
+
+                <div class="scene3-heart">♥</div>
+
+                <button class="next-btn scene3-button" data-next="4">
+                    Continuer
+                    <span>✨</span>
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SCÈNE 4 — MESSAGE
+        ========================== -->
+        <section class="scene scene-4" id="scene4">
+
+            <div class="scene4-background"></div>
+            <div class="scene4-glow glow"></div>
+            <div class="scene4-particles"></div>
+
+            <div class="scene-content scene4-content">
+
+                <p class="small-text scene4-subtitle">J'aimerais te dire quelque chose...</p>
+
+                <div class="typing-container">
+                    <span class="typing-quote">“</span>
+                    <h2 id="typing-text" class="typing-text"></h2>
+                    <span class="typing-cursor"></span>
+                    <span class="typing-quote quote-bottom">”</span>
+                </div>
+
+                <p class="scene4-signature">— Pour Christina ❤️</p>
+
+                <button class="next-btn scene4-button" data-next="5">
+                    Continuer
+                    <span>💕</span>
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- =========================
+             SCÈNE 5 — DEUX CŒURS
+        ========================== -->
+        <section class="scene scene-5" id="scene5">
+
+            <div class="scene5-background"></div>
+            <div class="scene5-particles"></div>
+            <div class="heart-meeting-glow"></div>
+
+            <div class="heart-container">
+                <div class="little-heart heart-left">❤️</div>
+                <div class="little-heart heart-right">❤️</div>
+                <div class="meeting-heart">❤️</div>
+            </div>
+
+            <div class="heart-explosion">
+                <span>♥</span><span>♥</span><span>♥</span><span>♥</span>
+                <span>♥</span><span>♥</span><span>♥</span><span>♥</span>
+            </div>
+
+            <div class="scene-content scene5-content">
+
+                <p class="small-text scene5-subtitle">Et parfois...</p>
+
+                <h2 class="scene5-title">Deux chemins finissent par se rencontrer</h2>
+
+                <p class="message scene5-message">
+                    Et à cet instant,
+                    quelque chose change doucement.
+                </p>
+
+                <button class="next-btn scene5-button" data-next="6">
+                    Continuer
+                    <span>❤️</span>
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- =========================
+             SCÈNE 6 — PRESQUE LA FIN
+        ========================== -->
+        <section class="scene scene-6" id="scene6">
+
+            <div class="scene6-sky"></div>
+            <div class="scene6-stars"></div>
+            <div class="scene6-moon"></div>
+            <div class="scene6-glow"></div>
+
+            <div class="scene-content scene6-content">
+
+                <p class="small-text scene6-subtitle">Et maintenant...</p>
+
+                <div class="scene6-heart">♥</div>
+
+                <h2 class="scene6-title">
+                    Certaines personnes arrivent
+                    dans notre vie...
+                </h2>
+
+                <p class="message scene6-message">
+                    Et sans même s'en rendre compte,
+                    elles la rendent un peu plus belle.
+                </p>
+
+                <p class="scene6-name">Christina</p>
+
+                <button class="next-btn scene6-button" data-next="7">
+                    La suite
+                    <span>❤️</span>
+                </button>
+
+            </div>
+
+        </section>
+
+        <!-- =========================
+             SCÈNE 7 — FINAL ❤️
+        ========================== -->
+        <section class="scene scene-7" id="scene7">
+
+            <div class="final-bg"></div>
+            <div class="final-stars"></div>
+            <div class="final-particles"></div>
+            <div class="final-heart-glow"></div>
+
+            <div class="orbit-hearts">
+                <span>♥</span><span>♥</span><span>♥</span>
+                <span>♥</span><span>♥</span><span>♥</span>
+            </div>
+
+            <div class="love-heart">
+                <div class="love-heart-inner">
+                    <div class="love-names">
+                        <span class="christina-final">Christina</span>
+                        <span class="love-symbol">♥</span>
+                        <span class="stephano-final">Stephano</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="final-message">
+                <p class="final-small">Pour toi...</p>
+                <h1>Christina</h1>
+                <p class="final-phrase">
+                    Une petite histoire,
+                    simplement écrite avec le cœur.
+                </p>
+                <div class="final-divider">
+                    <span></span>♥<span></span>
+                </div>
+                <p class="final-signature">— Stephano</p>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+</html>

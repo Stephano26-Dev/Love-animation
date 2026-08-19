@@ -1,0 +1,1089 @@
+:root {
+    --pink: #ff4f9a;
+    --light-pink: #ff9dcc;
+    --dark-pink: #c2185b;
+    --purple: #7b2cff;
+    --deep-purple: #16002b;
+
+    --white: #ffffff;
+    --soft-white: rgba(255, 255, 255, 0.85);
+
+    --transition: 0.8s ease;
+    --radius: 20px;
+}
+
+/* =========================================================
+   RESET & BASE
+========================================================= */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { width: 100%; height: 100%; overflow: hidden; }
+
+body {
+    font-family: "Segoe UI", sans-serif;
+    background: #080014;
+    color: var(--white);
+}
+
+#app { width: 100%; height: 100vh; position: relative; overflow: hidden; }
+
+/* =========================================================
+   SCÈNES — comportement commun
+========================================================= */
+
+.scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.05);
+    transition: opacity var(--transition), transform 1s ease, visibility var(--transition);
+    overflow: hidden;
+}
+
+.scene.active { opacity: 1; visibility: visible; transform: scale(1); }
+
+.scene-content {
+    position: relative;
+    z-index: 10;
+    width: min(90%, 800px);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+}
+
+.small-text {
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--light-pink);
+    opacity: 0.9;
+}
+
+h1 {
+    font-size: clamp(4rem, 12vw, 9rem);
+    font-weight: 700;
+    background: linear-gradient(90deg, #ffffff, #ff9dcc, #ff4f9a, #ffffff);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientText 6s linear infinite;
+    text-shadow: 0 0 30px rgba(255, 79, 154, 0.5);
+}
+
+h2 {
+    font-size: clamp(2rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    text-shadow: 0 0 25px rgba(255, 79, 154, 0.35);
+}
+
+.message {
+    max-width: 650px;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    line-height: 1.8;
+    color: var(--soft-white);
+}
+
+.next-btn {
+    margin-top: 20px;
+    padding: 14px 32px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.next-btn:hover {
+    transform: translateY(-4px) scale(1.04);
+    background: rgba(255, 79, 154, 0.25);
+    box-shadow: 0 0 30px rgba(255, 79, 154, 0.5);
+}
+
+.next-btn:active { transform: scale(0.95); }
+
+/* =========================================================
+   SYSTÈMES PARTAGÉS : étoiles / particules / cœurs flottants
+========================================================= */
+
+.stars, .particles, .floating-hearts, .final-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.floating-hearts { z-index: 2; overflow: hidden; }
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    box-shadow: 0 0 6px white, 0 0 12px rgba(255, 180, 230, 0.8);
+    animation: starTwinkle infinite ease-in-out;
+}
+
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 8px rgba(255, 150, 220, 0.9);
+    animation: particleFloat infinite ease-in-out;
+}
+
+.scene-3 .particle { box-shadow: 0 0 6px white, 0 0 14px rgba(180, 120, 255, 0.8); }
+
+.floating-heart {
+    position: absolute;
+    bottom: -40px;
+    opacity: 0;
+    filter: drop-shadow(0 0 8px rgba(255, 80, 170, 0.8));
+    animation: floatingHeart infinite ease-in;
+}
+
+.scene-2 .floating-heart:nth-child(2n) { animation-duration: 8s; }
+.scene-2 .floating-heart:nth-child(3n) { animation-duration: 10s; opacity: 0.7; }
+.scene-2 .floating-heart:nth-child(5n) { font-size: 30px; animation-duration: 12s; }
+.scene-2 .floating-heart:nth-child(7n) { filter: drop-shadow(0 0 15px rgba(255, 180, 230, 1)); }
+
+.final-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 8px white, 0 0 18px rgba(255, 80, 180, 0.8);
+    animation: finalParticle infinite ease-in-out;
+}
+
+.final-floating-heart {
+    position: absolute;
+    bottom: -50px;
+    font-size: 18px;
+    color: #ff75b7;
+    opacity: 0;
+    filter: drop-shadow(0 0 10px rgba(255, 70, 170, 0.9));
+    animation: finalHeartFloat infinite ease-in;
+}
+
+.glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 105, 180, 0.35), transparent 70%);
+    filter: blur(20px);
+    animation: pulseGlow 4s ease-in-out infinite;
+}
+
+/* =========================================================
+   SCÈNE 1 — INTRODUCTION
+========================================================= */
+
+.scene-1 {
+    background:
+        radial-gradient(circle at 50% 45%, rgba(120, 25, 130, 0.45), transparent 35%),
+        radial-gradient(circle at 50% 50%, #28002f 0%, #100017 50%, #030005 100%);
+}
+
+.intro-content { gap: 18px; }
+
+.intro-orb {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 90, 180, 0.25), rgba(150, 40, 180, 0.08) 45%, transparent 70%);
+    filter: blur(15px);
+    opacity: 0;
+    animation: introOrbAppear 3s ease forwards, introOrbPulse 5s ease-in-out 3s infinite;
+}
+
+.intro-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border: 1px solid rgba(255, 150, 220, 0.15);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    pointer-events: none;
+}
+
+.ring-1 { width: 380px; height: 380px; animation: introRing 7s ease-in-out infinite; }
+.ring-2 { width: 600px; height: 600px; animation: introRing 9s ease-in-out 1s infinite; }
+
+.intro-subtitle { opacity: 0; animation: introFadeUp 1.5s ease 1s forwards; }
+
+.christina-wrapper { position: relative; display: flex; align-items: center; justify-content: center; }
+
+.christina-title {
+    position: relative;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(30px) scale(0.85);
+    animation: christinaAppear 2s cubic-bezier(.2,.8,.2,1) 1.8s forwards;
+}
+
+.christina-glow {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 70, 170, 0.35), transparent 70%);
+    filter: blur(30px);
+    opacity: 0;
+    animation: christinaGlow 2s ease 2s forwards, christinaGlowPulse 4s ease-in-out 4s infinite;
+}
+
+.intro-text {
+    color: rgba(255, 255, 255, 0.75);
+    opacity: 0;
+    animation: introFadeUp 1.5s ease 3.2s forwards;
+}
+
+.intro-heart { display: inline-block; margin-left: 5px; animation: heartbeat 1.6s ease-in-out infinite; }
+
+.intro-button {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: introFadeUp 1.5s ease 4s forwards;
+}
+
+.scene-1 .star:nth-child(3n) { width: 3px; height: 3px; }
+.scene-1 .star:nth-child(5n) { animation-duration: 6s; }
+.scene-1 .star:nth-child(7n) { animation-duration: 3s; }
+
+/* =========================================================
+   SCÈNE 2 — UNE PERSONNE ARRIVE
+========================================================= */
+
+.scene-2 {
+    background:
+        radial-gradient(circle at 50% 45%, rgba(255, 70, 170, 0.20), transparent 35%),
+        radial-gradient(circle at 20% 20%, rgba(120, 40, 200, 0.20), transparent 35%),
+        linear-gradient(145deg, #170020, #390536, #120017);
+}
+
+.scene2-content { gap: 20px; }
+
+.scene2-glow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 80, 175, 0.22), transparent 68%);
+    filter: blur(25px);
+    animation: scene2Glow 6s ease-in-out infinite;
+}
+
+.scene2-heart {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: min(55vw, 360px);
+    opacity: 0.07;
+    filter: blur(2px) drop-shadow(0 0 40px rgba(255, 80, 170, 0.8));
+    pointer-events: none;
+    animation: scene2HeartAppear 6s ease-in-out infinite;
+}
+
+.scene2-subtitle { opacity: 0; transform: translateY(25px); animation: scene2FadeUp 1.2s ease 0.4s forwards; }
+
+.scene2-title {
+    opacity: 0;
+    transform: translateY(35px) scale(0.95);
+    animation: scene2TitleAppear 1.5s cubic-bezier(.2,.8,.2,1) 1s forwards;
+}
+
+.scene2-message { max-width: 600px; opacity: 0; transform: translateY(25px); animation: scene2FadeUp 1.5s ease 1.8s forwards; }
+
+.scene2-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 5px;
+    opacity: 0;
+    animation: scene2FadeUp 1.2s ease 2.6s forwards;
+}
+
+.scene2-divider span {
+    display: block;
+    width: 50px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 150, 220, 0.7));
+}
+
+.scene2-divider span:last-child { background: linear-gradient(90deg, rgba(255, 150, 220, 0.7), transparent); }
+
+.scene2-divider i {
+    font-style: normal;
+    color: #ff75b7;
+    text-shadow: 0 0 12px #ff4f9a;
+    animation: heartbeat 1.6s ease-in-out infinite;
+}
+
+.scene2-button { opacity: 0; transform: translateY(20px); animation: scene2FadeUp 1.2s ease 3.2s forwards; }
+
+/* =========================================================
+   SCÈNE 3 — CONSTELLATION
+========================================================= */
+
+.scene-3 {
+    background: radial-gradient(ellipse at center, #24134c 0%, #100622 50%, #030208 100%);
+    perspective: 1000px;
+}
+
+.constellation { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.constellation-lines { position: absolute; width: 100%; height: 100%; opacity: 0.5; }
+
+.constellation-path {
+    fill: none;
+    stroke: rgba(255, 170, 225, 0.5);
+    stroke-width: 1;
+    stroke-dasharray: 10 12;
+    stroke-dashoffset: 1000;
+    animation: constellationDraw 6s ease-in-out forwards;
+}
+
+.path-1 { animation-delay: 0.5s; }
+.path-2 { animation-delay: 1.2s; }
+.path-3 { animation-delay: 1.9s; }
+
+.constellation-stars::before,
+.constellation-stars::after {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: white;
+    box-shadow:
+        150px 300px 0 1px white, 250px 180px 0 1px #ffd6ef, 370px 260px 0 2px white,
+        500px 130px 0 1px #ffd6ef, 630px 260px 0 2px white, 750px 180px 0 1px #ffd6ef,
+        850px 300px 0 1px white, 250px 430px 0 1px white, 370px 360px 0 2px #ffd6ef,
+        500px 560px 0 1px white, 630px 360px 0 2px white, 750px 430px 0 1px white;
+    animation: constellationTwinkle 3s ease-in-out infinite alternate;
+}
+
+.constellation-stars::after { opacity: 0.5; transform: scale(1.8); filter: blur(3px); }
+
+.scene3-content { z-index: 10; gap: 20px; }
+.scene3-subtitle { opacity: 0; animation: scene3Appear 1.2s ease 0.8s forwards; }
+
+.scene3-title {
+    max-width: 750px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: scene3Title 1.5s cubic-bezier(.2,.8,.2,1) 2s forwards;
+}
+
+.scene3-message { max-width: 650px; opacity: 0; animation: scene3Appear 1.5s ease 3.1s forwards; }
+
+.scene3-heart {
+    font-size: 2rem;
+    color: #ff75b7;
+    opacity: 0;
+    text-shadow: 0 0 10px #ff4f9a, 0 0 30px #ff4f9a;
+    animation: scene3Heart 2s ease 4s forwards, heartbeat 1.8s ease-in-out 6s infinite;
+}
+
+.scene3-button { opacity: 0; animation: scene3Appear 1.2s ease 4.7s forwards; }
+
+/* =========================================================
+   SCÈNE 4 — MESSAGE INTIME
+========================================================= */
+
+.scene-4 {
+    background:
+        radial-gradient(circle at 50% 45%, rgba(255, 80, 170, 0.25), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(150, 40, 200, 0.18), transparent 35%),
+        linear-gradient(135deg, #21001f, #4a0b40, #110014);
+}
+
+.scene4-background {
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(ellipse at center, rgba(255, 100, 190, 0.08), transparent 50%);
+    animation: scene4Background 8s ease-in-out infinite;
+}
+
+.scene4-glow { width: 420px; height: 420px; opacity: 0.3; animation: scene4Glow 5s ease-in-out infinite; }
+
+.scene4-content { z-index: 10; gap: 22px; }
+.scene4-subtitle { opacity: 0; animation: scene4Fade 1.3s ease 0.5s forwards; }
+
+.typing-container {
+    position: relative;
+    width: min(90vw, 850px);
+    padding: 40px 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: scale(0.95);
+    animation: typingContainerAppear 1.2s ease 1s forwards;
+}
+
+.typing-text {
+    max-width: 750px;
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    line-height: 1.5;
+    font-weight: 400;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 0 15px rgba(255, 130, 200, 0.25);
+}
+
+.typing-quote {
+    font-family: Georgia, serif;
+    font-size: 7rem;
+    line-height: 1;
+    color: rgba(255, 130, 200, 0.35);
+    position: absolute;
+    left: 10px;
+    top: 5px;
+}
+
+.quote-bottom { left: auto; top: auto; right: 10px; bottom: -20px; }
+
+.typing-cursor {
+    width: 2px;
+    height: 1.2em;
+    margin-left: 5px;
+    background: #ff8bc5;
+    box-shadow: 0 0 10px #ff4f9a;
+    animation: typingCursor 0.8s step-end infinite;
+}
+
+.scene4-signature {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: rgba(255, 180, 220, 0.8);
+    opacity: 0;
+    animation: scene4Fade 1.5s ease 5s forwards;
+}
+
+.scene4-button { opacity: 0; animation: scene4Fade 1.2s ease 5.8s forwards; }
+
+.scene4-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 180, 220, 0.8) 1px, transparent 1px);
+    background-size: 90px 90px;
+    opacity: 0.15;
+    animation: scene4Particles 12s linear infinite;
+}
+
+@media (max-width: 600px) {
+    .typing-container { padding: 30px 25px; }
+    .typing-quote { font-size: 4rem; left: 0; }
+    .quote-bottom { right: 0; bottom: -10px; }
+}
+
+/* =========================================================
+   SCÈNE 5 — LA RENCONTRE DES DEUX CŒURS
+========================================================= */
+
+.scene-5 {
+    background:
+        radial-gradient(circle at center, rgba(255, 70, 170, 0.18), transparent 30%),
+        radial-gradient(circle at 20% 50%, rgba(140, 40, 190, 0.18), transparent 30%),
+        radial-gradient(circle at 80% 50%, rgba(255, 60, 150, 0.15), transparent 30%),
+        #100015;
+    overflow: hidden;
+}
+
+.scene5-background {
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 80, 180, 0.15), transparent 25%);
+    animation: scene5Background 8s ease-in-out infinite;
+}
+
+.heart-container { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
+
+.little-heart {
+    position: absolute;
+    top: 42%;
+    font-size: clamp(3rem, 7vw, 6rem);
+    opacity: 0;
+    filter: drop-shadow(0 0 15px rgba(255, 70, 170, 0.9)) drop-shadow(0 0 35px rgba(255, 70, 170, 0.5));
+}
+
+.heart-left { left: 8%; }
+.heart-right { right: 8%; }
+
+.meeting-heart {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: clamp(4rem, 9vw, 8rem);
+    opacity: 0;
+    filter: drop-shadow(0 0 20px #ff4f9a) drop-shadow(0 0 50px rgba(255, 70, 170, 0.9));
+}
+
+.heart-meeting-glow {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(255, 80, 180, 0.6), transparent 70%);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    filter: blur(5px);
+}
+
+.heart-explosion { position: absolute; left: 50%; top: 42%; width: 10px; height: 10px; z-index: 7; pointer-events: none; }
+
+.heart-explosion span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 18px;
+    color: #ff8bc8;
+    opacity: 0;
+    filter: drop-shadow(0 0 8px #ff4f9a);
+}
+
+.scene5-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 180, 220, 0.8) 1px, transparent 1px);
+    background-size: 100px 100px;
+    opacity: 0.12;
+    animation: scene5Particles 10s linear infinite;
+}
+
+.scene5-content { z-index: 20; margin-top: 180px; gap: 18px; }
+.scene5-subtitle, .scene5-title, .scene5-message, .scene5-button { opacity: 0; }
+
+@media (max-width: 600px) {
+    .little-heart { font-size: 3.5rem; }
+    .scene5-content { margin-top: 130px; width: 90%; }
+    .heart-explosion span { font-size: 14px; }
+}
+
+/* ---------------------------------------------------------
+   Contrôle des animations de la scène 5 :
+   elles ne démarrent que lorsque le JS ajoute .scene5-active
+   (ce qui permet de rejouer la scène à chaque visite)
+--------------------------------------------------------- */
+
+.scene-5.scene5-active .heart-left {
+    animation: heartComeLeft 5s cubic-bezier(.15,.75,.2,1) 0.3s forwards;
+}
+
+.scene-5.scene5-active .heart-right {
+    animation: heartComeRight 5s cubic-bezier(.15,.75,.2,1) 0.3s forwards;
+}
+
+.scene-5.scene5-active .meeting-heart {
+    animation: meetingHeartAppear 1.8s ease-out 5s forwards;
+}
+
+.scene-5.scene5-active .heart-meeting-glow {
+    animation: meetingGlow 2s ease-out 4.8s forwards;
+}
+
+.scene-5.scene5-active .heart-explosion span:nth-child(1) { animation: explosion1 2s ease-out 5s forwards; }
+.scene-5.scene5-active .heart-explosion span:nth-child(2) { animation: explosion2 2s ease-out 5s forwards; }
+.scene-5.scene5-active .heart-explosion span:nth-child(3) { animation: explosion3 2s ease-out 5s forwards; }
+.scene-5.scene5-active .heart-explosion span:nth-child(4) { animation: explosion4 2s ease-out 5s forwards; }
+.scene-5.scene5-active .heart-explosion span:nth-child(5) { animation: explosion5 2s ease-out 5s forwards; }
+.scene-5.scene5-active .heart-explosion span:nth-child(6) { animation: explosion6 2s ease-out 5s forwards; }
+.scene-5.scene5-active .heart-explosion span:nth-child(7) { animation: explosion7 2s ease-out 5s forwards; }
+.scene-5.scene5-active .heart-explosion span:nth-child(8) { animation: explosion8 2s ease-out 5s forwards; }
+
+.scene-5.scene5-active .scene5-subtitle { animation: scene5TextAppear 1.2s ease 5.8s forwards; }
+.scene-5.scene5-active .scene5-title { animation: scene5TextAppear 1.5s ease 6.2s forwards; }
+.scene-5.scene5-active .scene5-message { animation: scene5TextAppear 1.3s ease 6.8s forwards; }
+.scene-5.scene5-active .scene5-button { animation: scene5TextAppear 1.2s ease 7.5s forwards; }
+
+/* =========================================================
+   SCÈNE 6 — MOMENT CALME ET ROMANTIQUE
+========================================================= */
+
+.scene-6 {
+    background:
+        radial-gradient(circle at 50% 35%, rgba(90, 60, 180, 0.20), transparent 35%),
+        radial-gradient(circle at 20% 80%, rgba(255, 80, 170, 0.12), transparent 35%),
+        linear-gradient(180deg, #080016, #120020, #050008);
+    overflow: hidden;
+}
+
+.scene6-sky {
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(ellipse at 50% 40%, rgba(150, 90, 220, 0.10), transparent 50%);
+    animation: scene6Sky 12s ease-in-out infinite;
+}
+
+.scene6-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,180,230,0.7) 1px, transparent 1px);
+    background-size: 90px 90px, 150px 150px;
+    background-position: 0 0, 40px 70px;
+    opacity: 0.35;
+    animation: scene6Stars 18s linear infinite;
+}
+
+.scene6-moon {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    right: 12%;
+    top: 12%;
+    background: radial-gradient(circle at 35% 35%, white, rgba(230,210,255,0.8) 45%, rgba(180,140,220,0.25) 70%, transparent 72%);
+    opacity: 0;
+    filter: blur(0.5px) drop-shadow(0 0 25px rgba(220,190,255,0.6));
+    animation: scene6Moon 2s ease 0.5s forwards;
+}
+
+.scene6-glow {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,80,180,0.22), transparent 70%);
+    filter: blur(25px);
+    opacity: 0;
+    animation: scene6Glow 3s ease 1s forwards, scene6GlowPulse 6s ease-in-out 4s infinite;
+}
+
+.scene6-content { z-index: 10; gap: 20px; }
+.scene6-subtitle { opacity: 0; animation: scene6FadeUp 1.2s ease 0.8s forwards; }
+
+.scene6-heart {
+    font-size: clamp(3rem, 7vw, 6rem);
+    color: rgba(255, 100, 180, 0.9);
+    opacity: 0;
+    text-shadow: 0 0 15px rgba(255,70,170,0.9), 0 0 40px rgba(255,70,170,0.6), 0 0 80px rgba(255,70,170,0.3);
+    animation: scene6HeartAppear 1.5s ease 1.5s forwards, heartbeat 1.8s ease-in-out 3s infinite;
+}
+
+.scene6-title { max-width: 750px; text-align: center; opacity: 0; transform: translateY(25px); animation: scene6FadeUp 1.5s ease 2.4s forwards; }
+.scene6-message { max-width: 650px; text-align: center; opacity: 0; transform: translateY(20px); animation: scene6FadeUp 1.5s ease 3.2s forwards; }
+
+.scene6-name {
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    color: rgba(255, 170, 220, 0.9);
+    text-shadow: 0 0 15px rgba(255,80,170,0.6);
+    opacity: 0;
+    animation: scene6Name 1.5s ease 4.3s forwards;
+}
+
+.scene6-button { opacity: 0; transform: translateY(20px); animation: scene6FadeUp 1.2s ease 5.2s forwards; }
+
+@media (max-width: 600px) {
+    .scene6-moon { width: 60px; height: 60px; right: 8%; top: 8%; }
+    .scene6-content { width: 90%; }
+}
+
+/* =========================================================
+   SCÈNE 7 — FINAL ❤️
+========================================================= */
+
+.scene-7 {
+    background:
+        radial-gradient(circle at center, #7d1f67 0%, #3a073d 35%, #100016 70%, #030006 100%);
+    overflow: hidden;
+}
+
+.final-bg {
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(ellipse at center, rgba(255, 80, 180, 0.15), transparent 45%);
+    animation: finalBgPulse 10s ease-in-out infinite;
+}
+
+.final-stars {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, white 1px, transparent 1px);
+    background-size: 110px 110px;
+    opacity: 0.25;
+    animation: finalStars 20s linear infinite;
+}
+
+.final-heart-glow {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    width: 480px;
+    height: 480px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 70, 170, 0.35), transparent 70%);
+    filter: blur(30px);
+    opacity: 0;
+    animation: finalGlowAppear 2.5s ease 0.5s forwards, finalGlowPulse 5s ease-in-out 3s infinite;
+}
+
+/* --- petits cœurs en orbite autour du grand cœur --- */
+
+.orbit-hearts {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    width: 320px;
+    height: 320px;
+    --orbit-radius: 160px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: orbitRotate 16s linear infinite;
+}
+
+.orbit-hearts span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 1.3rem;
+    color: #ff8bc8;
+    filter: drop-shadow(0 0 8px #ff4f9a);
+}
+
+.orbit-hearts span:nth-child(1) { transform: rotate(0deg) translateX(var(--orbit-radius)); }
+.orbit-hearts span:nth-child(2) { transform: rotate(60deg) translateX(var(--orbit-radius)); }
+.orbit-hearts span:nth-child(3) { transform: rotate(120deg) translateX(var(--orbit-radius)); }
+.orbit-hearts span:nth-child(4) { transform: rotate(180deg) translateX(var(--orbit-radius)); }
+.orbit-hearts span:nth-child(5) { transform: rotate(240deg) translateX(var(--orbit-radius)); }
+.orbit-hearts span:nth-child(6) { transform: rotate(300deg) translateX(var(--orbit-radius)); }
+
+/* --- grand cœur avec les deux prénoms --- */
+
+.love-heart {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    width: clamp(150px, 40vw, 220px);
+    height: clamp(150px, 40vw, 220px);
+    transform: translate(-50%, -60%) rotate(-45deg) scale(0);
+    background: linear-gradient(135deg, #ff5da8, #ff287f);
+    border-radius: 25px 25px 6px 6px;
+    box-shadow: 0 0 25px rgba(255,50,150,.9), 0 0 60px rgba(255,50,150,.6);
+    animation: loveHeartAppear 2.2s cubic-bezier(.2,.8,.2,1) 1s forwards, loveHeartBeat 2s ease-in-out 3.5s infinite;
+    z-index: 10;
+}
+
+.love-heart::before,
+.love-heart::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    border-radius: 50%;
+}
+
+.love-heart::before { top: -50%; left: 0; }
+.love-heart::after { left: 50%; top: 0; }
+
+.love-heart-inner { position: absolute; inset: 0; }
+
+.love-names {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    z-index: 20;
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: white;
+    text-align: center;
+    text-shadow: 0 2px 5px rgba(100,0,50,.8), 0 0 12px rgba(255,255,255,.5);
+    opacity: 0;
+    animation: fadeInUp 1.5s ease 2.5s forwards;
+}
+
+.christina-final { font-size: clamp(1rem, 3vw, 1.5rem); font-weight: 600; }
+.stephano-final { font-size: clamp(0.9rem, 2.6vw, 1.3rem); font-weight: 400; }
+.love-symbol { font-size: 0.95rem; opacity: 0.9; animation: heartbeat 1.5s ease-in-out infinite; }
+
+/* --- texte final --- */
+
+.final-message {
+    position: absolute;
+    left: 50%;
+    bottom: 6%;
+    transform: translateX(-50%);
+    z-index: 30;
+    width: 90%;
+    max-width: 650px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.final-small {
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--light-pink);
+    opacity: 0;
+    animation: finalText 1.2s ease 4s forwards;
+}
+
+.final-message h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    opacity: 0;
+    animation: finalText 1.5s ease 4.5s forwards;
+}
+
+.final-phrase {
+    color: rgba(255,255,255,.8);
+    font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+    line-height: 1.7;
+    opacity: 0;
+    animation: finalText 1.5s ease 5.2s forwards;
+}
+
+.final-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: finalText 1s ease 5.8s forwards;
+}
+
+.final-divider span {
+    width: 70px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,150,220,0.7));
+}
+
+.final-divider span:last-child { background: linear-gradient(90deg, rgba(255,150,220,0.7), transparent); }
+
+.final-signature {
+    color: rgba(255, 180, 220, 0.95);
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: finalSignature 1.5s ease 6.3s forwards;
+}
+
+@media (max-width: 600px) {
+    .orbit-hearts { --orbit-radius: 100px; width: 220px; height: 220px; }
+    .final-message { bottom: 4%; }
+    .final-message h1 { font-size: 2rem; }
+    .final-phrase { font-size: 0.9rem; }
+}
+
+/* =========================================================
+   ANIMATIONS (keyframes)
+========================================================= */
+
+@keyframes gradientText { 0% { background-position: 0%; } 100% { background-position: 300%; } }
+@keyframes pulseGlow { 0%, 100% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } }
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.12); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.08); }
+    60% { transform: scale(1); }
+}
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+@keyframes starTwinkle {
+    0% { opacity: 0; transform: scale(0.3); }
+    30% { opacity: 0.5; }
+    50% { opacity: 1; transform: scale(1.4); }
+    70% { opacity: 0.5; }
+    100% { opacity: 0; transform: scale(0.3); }
+}
+
+@keyframes particleFloat {
+    0% { opacity: 0; transform: translateY(30px) scale(0.5); }
+    30% { opacity: 0.8; }
+    70% { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(-120px) scale(1.2); }
+}
+
+@keyframes floatingHeart {
+    0% { opacity: 0; transform: translateY(0) rotate(0deg) scale(0.6); }
+    15% { opacity: 0.8; }
+    50% { transform: translateY(-45vh) translateX(20px) rotate(15deg) scale(1); }
+    80% { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(-110vh) translateX(-30px) rotate(-20deg) scale(0.7); }
+}
+
+@keyframes finalParticle {
+    0% { opacity: 0; transform: translateY(30px) scale(0); }
+    20% { opacity: 0.9; }
+    50% { opacity: 1; transform: translateY(-40px) scale(1.2); }
+    80% { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(-150px) scale(0.2); }
+}
+
+@keyframes finalHeartFloat {
+    0% { opacity: 0; transform: translateY(0) scale(0.4) rotate(0deg); }
+    15% { opacity: 0.9; }
+    50% { opacity: 0.8; transform: translateY(-45vh) translateX(30px) scale(1) rotate(15deg); }
+    80% { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(-110vh) translateX(-40px) scale(0.6) rotate(-20deg); }
+}
+
+/* --- scène 1 --- */
+@keyframes introOrbAppear { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
+@keyframes introOrbPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+@keyframes introRing {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    30% { opacity: 0.5; }
+    70% { opacity: 0.15; }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.3); }
+}
+@keyframes introFadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 0.9; transform: translateY(0); } }
+@keyframes christinaAppear {
+    0% { opacity: 0; transform: translateY(30px) scale(0.85); filter: blur(12px); }
+    60% { opacity: 1; filter: blur(0); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes christinaGlow { from { opacity: 0; } to { opacity: 1; } }
+@keyframes christinaGlowPulse { 0%, 100% { transform: scale(0.9); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } }
+
+/* --- scène 2 --- */
+@keyframes scene2Glow { 0%, 100% { transform: scale(0.8); opacity: 0.4; } 50% { transform: scale(1.25); opacity: 0.9; } }
+@keyframes scene2HeartAppear {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    25% { opacity: 0.08; }
+    50% { opacity: 0.13; transform: translate(-50%, -50%) scale(1); }
+    75% { opacity: 0.07; }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1.15); }
+}
+@keyframes scene2FadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scene2TitleAppear {
+    from { opacity: 0; transform: translateY(35px) scale(0.95); filter: blur(8px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* --- scène 3 --- */
+@keyframes constellationDraw { to { stroke-dashoffset: 0; } }
+@keyframes constellationTwinkle { from { opacity: 0.3; } to { opacity: 1; } }
+@keyframes scene3Appear { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scene3Title {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); filter: blur(10px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes scene3Heart { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+
+/* --- scène 4 --- */
+@keyframes scene4Background { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.15); opacity: 1; } }
+@keyframes scene4Glow { 0%, 100% { transform: scale(0.8); opacity: 0.25; } 50% { transform: scale(1.2); opacity: 0.65; } }
+@keyframes scene4Fade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes typingContainerAppear { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes typingCursor { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+@keyframes scene4Particles { from { transform: translateY(0); } to { transform: translateY(-90px); } }
+
+/* --- scène 5 --- */
+@keyframes scene5Background { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } }
+@keyframes heartComeLeft {
+    0% { opacity: 0; transform: translateX(-120px) scale(0.5) rotate(-25deg); }
+    15% { opacity: 1; }
+    70% { opacity: 1; transform: translateX(28vw) scale(1.1) rotate(10deg); }
+    82% { transform: translateX(40vw) scale(1.2) rotate(0); }
+    87% { transform: translateX(41vw) scale(0.9); }
+    100% { opacity: 0; transform: translateX(41vw) scale(0.3); }
+}
+@keyframes heartComeRight {
+    0% { opacity: 0; transform: translateX(120px) scale(0.5) rotate(25deg); }
+    15% { opacity: 1; }
+    70% { opacity: 1; transform: translateX(-28vw) scale(1.1) rotate(-10deg); }
+    82% { transform: translateX(-40vw) scale(1.2) rotate(0); }
+    87% { transform: translateX(-41vw) scale(0.9); }
+    100% { opacity: 0; transform: translateX(-41vw) scale(0.3); }
+}
+@keyframes meetingHeartAppear {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+    35% { opacity: 0; }
+    55% { opacity: 1; transform: translate(-50%, -50%) scale(1.4); }
+    75% { transform: translate(-50%, -50%) scale(0.9); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+}
+@keyframes meetingGlow {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+    25% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(7); }
+}
+@keyframes explosion1 { from { opacity: 1; transform: translate(0,0) scale(0.3); } to { opacity: 0; transform: translate(-180px,-100px) scale(1); } }
+@keyframes explosion2 { from { opacity: 1; transform: translate(0,0) scale(0.3); } to { opacity: 0; transform: translate(150px,-120px) scale(0.8); } }
+@keyframes explosion3 { from { opacity: 1; transform: translate(0,0) scale(0.3); } to { opacity: 0; transform: translate(-230px,20px) scale(1.1); } }
+@keyframes explosion4 { from { opacity: 1; transform: translate(0,0) scale(0.3); } to { opacity: 0; transform: translate(220px,40px) scale(0.9); } }
+@keyframes explosion5 { from { opacity: 1; transform: translate(0,0) scale(0.3); } to { opacity: 0; transform: translate(-100px,160px) scale(0.8); } }
+@keyframes explosion6 { from { opacity: 1; transform: translate(0,0) scale(0.3); } to { opacity: 0; transform: translate(120px,170px) scale(1); } }
+@keyframes explosion7 { from { opacity: 1; transform: translate(0,0) scale(0.3); } to { opacity: 0; transform: translate(-60px,-190px) scale(0.7); } }
+@keyframes explosion8 { from { opacity: 1; transform: translate(0,0) scale(0.3); } to { opacity: 0; transform: translate(70px,-210px) scale(0.8); } }
+@keyframes scene5Particles { from { transform: translate(0,0); } to { transform: translate(-100px,-100px); } }
+@keyframes scene5TextAppear { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+
+/* --- scène 6 --- */
+@keyframes scene6Sky { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.15); opacity: 1; } }
+@keyframes scene6Stars { from { transform: translateY(0); } to { transform: translateY(-120px); } }
+@keyframes scene6Moon { from { opacity: 0; transform: translateY(-20px) scale(0.7); } to { opacity: 0.8; transform: translateY(0) scale(1); } }
+@keyframes scene6Glow { from { opacity: 0; transform: scale(0.4); } to { opacity: 0.8; transform: scale(1); } }
+@keyframes scene6GlowPulse { 0%, 100% { transform: scale(0.9); opacity: 0.45; } 50% { transform: scale(1.2); opacity: 0.8; } }
+@keyframes scene6FadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scene6HeartAppear {
+    from { opacity: 0; transform: scale(0) translateY(20px); }
+    70% { transform: scale(1.15); }
+    to { opacity: 1; transform: scale(1); }
+}
+@keyframes scene6Name { from { opacity: 0; letter-spacing: 12px; } to { opacity: 1; letter-spacing: 4px; } }
+
+/* --- scène 7 --- */
+@keyframes finalBgPulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } }
+@keyframes finalStars { from { transform: translateY(0); } to { transform: translateY(-110px); } }
+@keyframes finalGlowAppear { from { opacity: 0; transform: translate(-50%, -50%) scale(0.4); } to { opacity: 0.8; transform: translate(-50%, -50%) scale(1); } }
+@keyframes finalGlowPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.45; }
+    50% { transform: translate(-50%, -50%) scale(1.25); opacity: 0.8; }
+}
+@keyframes orbitRotate { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes loveHeartAppear {
+    0% { opacity: 0; transform: translate(-50%, -60%) rotate(-45deg) scale(0); }
+    70% { opacity: 1; transform: translate(-50%, -60%) rotate(-45deg) scale(1.1); }
+    100% { opacity: 1; transform: translate(-50%, -60%) rotate(-45deg) scale(1); }
+}
+@keyframes loveHeartBeat { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.2); } }
+@keyframes finalText { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes finalSignature { from { opacity: 0; letter-spacing: 8px; } to { opacity: 1; letter-spacing: 2px; } }
+
+/* =========================================================
+   RESPONSIVE GÉNÉRAL
+========================================================= */
+
+@media (max-width: 600px) {
+    .scene-content { width: 90%; }
+    .next-btn { padding: 12px 26px; }
+}
